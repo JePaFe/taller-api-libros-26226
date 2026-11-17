@@ -1,4 +1,4 @@
-import { collection, getDocs, doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc, addDoc } from "firebase/firestore";
 import { db } from "../config/firebase.js";
 
 const booksCollection = collection(db, "books");
@@ -23,5 +23,14 @@ export const getBookById = async (id) => {
   return {
     ...snapshot.data(),
     id: snapshot.id,
+  };
+};
+
+export const createBook = async (data) => {
+  const reference = await addDoc(booksCollection, data);
+
+  return {
+    ...data,
+    id: reference.id,
   };
 };

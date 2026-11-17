@@ -1,4 +1,4 @@
-import { listBooks, findBook } from "../services/books.service.js";
+import { listBooks, findBook, addBook } from "../services/books.service.js";
 
 export const getBooks = async (req, res) => {
   try {
@@ -22,5 +22,30 @@ export const getBook = async (req, res) => {
     res.json(book);
   } catch (error) {
     res.status(500).json({ error: "Error al obtener libro" });
+  }
+};
+
+export const postBook = async (req, res) => {
+  try {
+    const { title, price } = req.body ?? {};
+
+    if (
+      typeof title !== "string" ||
+      !title.trim() ||
+      typeof price !== "number" ||
+      price <= 0
+    ) {
+      return res.status(400).json({
+        error: "Título y precio válidos son obligatorios",
+      });
+    }
+
+    const book = await addBook({ title, price });
+
+    res.status(201).json(book);
+  } catch (error) {
+    res.status(500).json({
+      error: "Error al crear libro",
+    });
   }
 };
