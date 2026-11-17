@@ -11,3 +11,17 @@ export const getAllBooks = async () => {
     id: item.id,
   }));
 };
+
+export const getBookById = async (id) => {
+  const reference = doc(db, "books", id);
+  const snapshot = await getDoc(reference);
+
+  if (!snapshot.exists()) {
+    return null;
+  }
+
+  return {
+    ...snapshot.data(),
+    id: snapshot.id,
+  };
+};
